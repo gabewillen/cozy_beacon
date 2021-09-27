@@ -11,7 +11,7 @@ $(OUTPUT_DIRECTORY)/nrf52811_xxaa.out: \
 
 # SDK_CONFIG BEGIN
 SEGGER_RTT := yes
-BLE_ADVERTISING := no
+BLE_ADVERTISING := yes
 LIB_LOG := rtt
 LIB_PWR_MGMT := yes
 NRFX_TEMP := yes
@@ -249,7 +249,7 @@ CFLAGS += -DSOFTDEVICE_PRESENT
 CFLAGS += -mcpu=cortex-m4
 CFLAGS += -DBOARD_CUSTOM
 CFLAGS += -mthumb -mabi=aapcs
-CFLAGS += -Wall -Werror
+#CFLAGS += -Wall -Werror
 CFLAGS += -mfloat-abi=soft
 # keep every function in a separate section, this allows linker to discard unused ones
 CFLAGS += -ffunction-sections -fdata-sections -fno-strict-aliasing
@@ -279,10 +279,10 @@ LDFLAGS += -Wl,--gc-sections
 # use newlib in nano version
 LDFLAGS += --specs=nano.specs
 
-nrf52811_xxaa: CFLAGS += -D__HEAP_SIZE=4096
-nrf52811_xxaa: CFLAGS += -D__STACK_SIZE=4096
-nrf52811_xxaa: ASMFLAGS += -D__HEAP_SIZE=4096
-nrf52811_xxaa: ASMFLAGS += -D__STACK_SIZE=4096
+nrf52811_xxaa: CFLAGS += -D__HEAP_SIZE=2048
+nrf52811_xxaa: CFLAGS += -D__STACK_SIZE=2048
+nrf52811_xxaa: ASMFLAGS += -D__HEAP_SIZE=2048
+nrf52811_xxaa: ASMFLAGS += -D__STACK_SIZE=2048
 
 # Add standard libraries at the very end of the linker input, after all objects
 # that may need symbols provided by these libraries.

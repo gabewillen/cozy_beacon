@@ -22,10 +22,13 @@ APP_TIMER_DEF(app_saadc_timer);
 
 static void app_saadc_sample_event_handler(void *event, uint16_t event_size) {
     app_manuf_data.battery_voltage = battery_level_in_percent(app_saadc_samples[0]);
-    app_manuf_data.mic_voltage = app_saadc_samples[1] / 200;
+    uint8_t mic_voltage = app_saadc_samples[1] ;
+    if (mic_voltage > app_manuf_data.mic_voltage) {
+        app_manuf_data.mic_voltage = mic_voltage;
+    }
     app_manuf_data.smd0805_20_voltage = app_saadc_samples[2] & 0xff;
     app_sched_event_put(NULL, 0, app_advertising_update);
-    NRF_LOG_INFO("mic_voltage= %lu, battery_voltage=%lu", app_saadc_samples[1], app_saadc_samples[0]);
+//    NRF_LOG_INFO("mic_voltage= %lu, battery_voltage=%lu", app_saadc_samples[1], app_saadc_samples[0]);
 }
 
 static void app_saadc_event_handler(nrfx_saadc_evt_t const * p_event)
@@ -38,7 +41,7 @@ static void app_saadc_event_handler(nrfx_saadc_evt_t const * p_event)
         {
             app_saadc_samples[i] = APP_SAADC_MILLI_VOLTS(p_event->data.done.p_buffer[i]);
         }
-        nrf_gpio_pin_set(MIC_SWITCH);
+//        nrf_gpio_pin_set(MIC_SWITCH);
         nrfx_saadc_uninit();
         app_saadc_initialized = false;
         app_sched_event_put(NULL, 0, app_saadc_sample_event_handler);
@@ -53,7 +56,7 @@ void app_nrfx_saadc_init()
     /*config adc*/
     nrfx_saadc_config_t saadc_config = NRFX_SAADC_DEFAULT_CONFIG;
 
-    APP_ERROR_CHECK(nrfx_saadc_init(&saadc_config, NULL));
+    APP_ERROR_CHECK(nrfx_saadc_init(&saadc_config, app_saadc_event_handler));
     app_saadc_initialized = true;
 
     /*battery*/
@@ -88,7 +91,7 @@ void app_saadc_init() {
     app_nrfx_saadc_init();
     app_saadc_sample();
     APP_ERROR_CHECK(app_timer_create(&app_saadc_timer, APP_TIMER_MODE_REPEATED, app_saadc_timer_timeout_handler));
-    APP_ERROR_CHECK(app_timer_start(app_saadc_timer, APP_TIMER_TICKS(2000), NULL));
+    APP_ERROR_CHECK(app_timer_start(app_saadc_timer, APP_TIMER_TICKS(10000), NULL));
 }
 
 void app_saadc_sample() {

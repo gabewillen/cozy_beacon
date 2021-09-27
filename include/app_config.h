@@ -55,7 +55,7 @@
 #define APP_BLE_CONN_CFG_TAG            1                                  /**< A tag identifying the SoftDevice BLE configuration. */
 #define APP_ADV_INTERVAL    MSEC_TO_UNITS(100, UNIT_0_625_MS)  /**< The advertising interval for non-connectable advertisement (100 ms). This value can vary between 100ms to 10.24s). */
 #define APP_ADV_DURATION        MSEC_TO_UNITS(1000, UNIT_10_MS)
-#define APP_ADV_PERIOD 5000
+#define APP_ADV_PERIOD 10000
 #define APP_MANUF_DATA_LENGTH          0x18                              /**< Total length of information advertised by the Beacon. */
 #define APP_ADV_DATA_LENGTH             0x15                               /**< Length of manufacturer specific data in the advertisement. */
 #define APP_DEVICE_TYPE                 0x02                               /**< 0x02 refers to Beacon. */

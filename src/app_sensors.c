@@ -167,7 +167,7 @@ void ICM_20600_int_clear() {
 
 
 void ICM_20600_gpiote_event_handler(nrfx_gpiote_pin_t pin, nrf_gpiote_polarity_t action) {
-    NRF_LOG_INFO("motion event %d", app_manuf_data.icm_20600_motion);
+//    NRF_LOG_INFO("motion event %d", app_manuf_data.icm_20600_motion);
     if (nrf_gpio_pin_read(ICM_20600_INT1)) {
         if (app_manuf_data.icm_20600_motion == 0) {
             app_manuf_data.icm_20600_motion = 1;
@@ -197,7 +197,7 @@ void ICM_20600_init() {
     ICM_20600_write_reg(0x21, 100u);
     ICM_20600_write_reg(0x22, 100u);
     ICM_20600_write_reg(0x69, 0b11000000);
-    ICM_20600_write_reg(0x19, 30u);
+    ICM_20600_write_reg(0x19, 255U);
     ICM_20600_write_reg(0x6b, buffer | (1 << 5));
     ICM_20600_read_reg(0x3A, &buffer, 1);
     APP_ERROR_CHECK(
@@ -292,7 +292,7 @@ void AHT20_soft_reset() {
 
 void nrf52811_temp_data_handler(int32_t measurement) {
     app_manuf_data.nrf52811_temperature = nrfx_temp_calculate(measurement) & 0xffff;
-    NRF_LOG_INFO("nrf52811_temperature = %lu", app_manuf_data.nrf52811_temperature);
+//    NRF_LOG_INFO("nrf52811_temperature = %lu", app_manuf_data.nrf52811_temperature);
     app_sched_event_put(NULL, 0, app_advertising_update);
 }
 
@@ -303,7 +303,7 @@ static void nrf_temp_sensor_init(void) {
 
 void app_sensor_timer_timeout_handler(void *context) {
     uint8_t buffer[2];
-    nrfx_temp_measure();
+//    nrfx_temp_measure();
     SPL06_007_start();
     AHT20_start_measurement();
     ICM_20600_read_reg(0x41, buffer, 2);
@@ -322,7 +322,7 @@ void app_sensors_init() {
     };
     APP_ERROR_CHECK(nrfx_twi_init(&app_twi, &twi_config, NULL, NULL));
     nrfx_twi_enable(&app_twi);
-    nrf_temp_sensor_init();
+//    nrf_temp_sensor_init();
     SPL06_007_init();
     ICM_20600_init();
     AHT20_init();

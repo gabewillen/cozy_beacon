@@ -2,6 +2,7 @@
 // Created by gwillen on 1/15/21.
 //
 
+#include <ble_advertising.h>
 #include "app_advertising.h"
 #include "nrf_sdh_ble.h"
 #include "app_timer.h"
@@ -16,7 +17,10 @@
 volatile bool app_advertising;
 //
 void app_ble_evt_handler(ble_evt_t const *evt, void *context) {
-    app_advertising = false;
+    if (evt->header.evt_id == BLE_GAP_EVT_ADV_SET_TERMINATED) {
+//            memset(&(&app_manuf_data)[sizeof(uint32_t) * 2], 0, sizeof(app_manuf_data) - (sizeof(uint32_t) * 2));
+            app_advertising = false;
+    }
 }
 
 
@@ -134,7 +138,7 @@ void app_advertising_stop(void) {
         app_advertising = false;
     }
     APP_ERROR_CHECK(app_timer_stop(app_advertising_timer));
-    NRF_LOG_INFO("app advertising stopped");
+//    NRF_LOG_INFO("app advertising stopped");
 }
 
 
@@ -145,11 +149,11 @@ void app_advertising_start(void)
     if (!app_advertising) {
         APP_ERROR_CHECK(sd_ble_gap_adv_start(app_adv_handle, APP_BLE_CONN_CFG_TAG));
         app_advertising = true;
-        NRF_LOG_INFO("app advertising started");
+//        NRF_LOG_INFO("app advertising started");
     }
     if (!app_advertising_timer->active) {
         APP_ERROR_CHECK(app_timer_start(app_advertising_timer, APP_TIMER_TICKS(APP_ADV_PERIOD), NULL));
-        NRF_LOG_INFO("app advertising timer started");
+//        NRF_LOG_INFO("app advertising timer started");
     }
 }
 

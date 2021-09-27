@@ -97,7 +97,8 @@ int main(void) {
 
     // Initialize.
     APP_SCHED_INIT(APP_SCHED_MAX_EVENT_DATA_SIZE, APP_SCHED_QUEUE_SIZE);
-    log_init();
+//    log_init();
+//    NRF_LOG_INFO("APP starting")
     app_lfclk_init();
     APP_ERROR_CHECK(nrf_pwr_mgmt_init());
     APP_ERROR_CHECK(app_timer_init());
@@ -112,9 +113,9 @@ int main(void) {
     // Enter main loop.
     while (true) {
         app_sched_execute();
-        if (NRF_LOG_PROCESS() == false) {
+//        if (NRF_LOG_PROCESS() == false) {
             nrf_pwr_mgmt_run();
-        }
+//        }
     }
 }
 
